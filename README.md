@@ -1,8 +1,10 @@
 # Deploy Private VPN Node · by Nar
 
-> 把一台空白 VPS，交付成可验证、可维护、凭证不外泄的个人 Reality 节点。
+> 不想继续买共享梯子？让 AI 带你从买一台 VPS 开始，搭好真正属于自己的个人节点。
 
-Deploy Private VPN Node 是一个运行在 Codex、Claude Code、Cursor 等 Agent 环境中的运维 Skill。它覆盖购买判断、Ubuntu 安全基线、VLESS Reality Vision、Xray/3X-UI、Shadowrocket 接入、双层防火墙、独立验收、备份和维护。
+Deploy Private VPN Node 首先服务不懂服务器的新手：你只需要说明预算、所在地区、常用设备和主要用途，AI 负责推荐 VPS；你完成购买和必要确认后，AI 继续完成 Ubuntu、VLESS Reality、Xray/3X-UI 和 Shadowrocket 接入，直到手机或电脑真实可用。
+
+安全基线、双层防火墙、独立验收、备份和维护是第二层能力。它们不是这个 Skill 的主角，而是为了避免“节点看起来装好了，却连不上、泄露凭证或很快坏掉”。
 
 它不是机场面板、公开订阅服务或来源不明的一键安装脚本，只面向个人或极少数受信任设备的合法使用。
 
@@ -10,9 +12,20 @@ Deploy Private VPN Node 是一个运行在 Codex、Claude Code、Cursor 等 Agen
 
 > 本项目最初由 **Nar / 那不然** 设计并开源。欢迎在 MIT License 下使用、修改和再发布；再分发本项目的全部或实质性部分时，请保留原始版权声明与许可证。
 
-## 为什么做它
+## 它首先解决什么
 
-部署一个节点并不难，真正容易出问题的是交付过程：
+你可能正在使用机场或共享订阅，但希望：
+
+- 不再和很多人共享同一个出口；
+- 自己租一台 VPS，拥有一个个人节点；
+- 不学习一整套 Linux 和网络术语，也能在 AI 帮助下完成搭建；
+- 最终直接导入 Shadowrocket 使用，而不是停在服务器面板显示“运行中”。
+
+这个 Skill 的完成标准很直接：**买对服务器 → AI 完成部署 → 导入客户端 → 真实能用。**
+
+## 为什么还要做后面的安全和验收
+
+对新手来说，节点“装上了”之后仍然有很多坑：
 
 - 把一键脚本显示“安装成功”当成节点真的可用；
 - 服务器监听了 443，却漏查云厂商外层防火墙；
@@ -22,7 +35,7 @@ Deploy Private VPN Node 是一个运行在 Codex、Claude Code、Cursor 等 Agen
 - 把 `unattended-upgrades active` 误认为安全补丁已经生效；
 - 在用户要求不断网时，直接更新内核、网络栈或重启 Xray。
 
-这个 Skill 把这些风险变成明确顺序、证据和阻断条件。
+这个 Skill 把这些风险变成明确顺序、证据和阻断条件，但它们都服务于最初那个目标：让新手真正用上自己的节点。
 
 ## 30 秒开始
 
@@ -33,9 +46,9 @@ npx skills add Nar101/deploy-private-vpn-node
 安装后可以直接说：
 
 ```text
-使用 deploy-private-vpn-node，帮我检查并维护一台自用 Ubuntu VPS。
-先做只读审计，不输出任何私钥、UUID、节点链接或 Token；
-如果操作可能让当前网络断线，先停止并说明原因。
+我不想继续买共享梯子了，想自己搭一个个人节点，但我不懂服务器。
+使用 deploy-private-vpn-node，先根据我的预算、地区、设备和用途推荐一台 VPS；
+购买由我确认，买完后请继续帮我搭好，并导入 Shadowrocket，直到真实能用。
 ```
 
 ## 支持的工作模式
@@ -49,12 +62,15 @@ npx skills add Nar101/deploy-private-vpn-node
 
 ## 它会做什么
 
-- 先区分购买决策、服务器状态和客户端问题；
-- 默认采用 Ubuntu LTS、VLESS + Reality + Vision；
+- 用大白话了解预算、地区、设备和主要用途；
+- 给新手一个明确的 VPS 推荐，而不是扔出一堆术语；
+- 购买后接管空白 Ubuntu VPS，部署 VLESS + Reality + Vision；
+- 生成客户端配置并接入 Shadowrocket；
+- 用真实网页/API 和出口 IP 确认节点确实能用；
+- 然后再完成凭证保护、防火墙、备份和维护；
 - 把云防火墙和 UFW 当作两道独立入口检查；
 - SSH 默认使用密钥，禁 root 和密码远程登录；
 - 面板和订阅端口默认不向公网开放；
-- 用真实客户端验证出口 IP、OpenAI/Claude 401 和 Google 204；
 - 区分零断流动作与必须进入维护窗口的动作；
 - 提供只读审计、SQLite 热备份和客户端验证脚本。
 
