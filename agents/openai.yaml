@@ -1,4 +1,4 @@
 interface:
   display_name: "从零搭建私人 VPN 节点"
-  short_description: "帮新手从购买 VPS 到用上自己的个人节点"
-  default_prompt: "使用 $deploy-private-vpn-node。我不想继续买共享梯子了，也不懂服务器；请带我选一台 VPS，并在我完成购买后帮我搭好个人节点，直到 Shadowrocket 真实可用。"
+  short_description: "帮新手搭好自己的 VPN，付费前先讲清费用"
+  default_prompt: "使用 $deploy-private-vpn-node。我不想继续买共享梯子了，也不懂服务器；请带我一步一步搭好自己的 VPN。开始前先列出全部预计费用，任何付费都先说明买什么、多少钱、以后是否续费，并等我确认；最终帮我在 Shadowrocket 里真实用上。"
