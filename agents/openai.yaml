@@ -1,4 +1,4 @@
 interface:
-  display_name: "从零搭建私人 VPN 节点"
-  short_description: "帮新手搭好自己的 VPN，付费前先讲清费用"
-  default_prompt: "使用 $deploy-private-vpn-node。我不想继续买共享梯子了，也不懂服务器；请带我一步一步搭好自己的 VPN。开始前先列出全部预计费用，任何付费都先说明买什么、多少钱、以后是否续费，并等我确认；最终帮我在 Shadowrocket 里真实用上。"
+  display_name: "搭建私人魔法节点"
+  short_description: "购买一台海外服务器，搭建只供自己使用的魔法上网节点"
+  default_prompt: "使用 $deploy-private-proxy-node，先识别我的设备和现有客户端，再带我搭建并验收只供自己使用的私人魔法上网节点；说明哪些路径已经实测，所有付费和安全设置都先等我确认。"

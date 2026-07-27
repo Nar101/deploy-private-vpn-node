@@ -1,8 +1,8 @@
-# Deploy Private VPN Node · by Nar
+# 搭建私人魔法节点 · by Nar
 
-> 不想继续买共享梯子？让 AI 带你从买一台 VPS 开始，搭好真正属于自己的个人节点。
+> 购买一台海外服务器，让 AI 带你搭建只供自己使用的魔法上网节点。
 
-Deploy Private VPN Node 首先服务不懂服务器的新手：你只需要说明预算、所在地区、常用设备和主要用途，AI 负责推荐 VPS；你完成购买和必要确认后，AI 继续完成 Ubuntu、VLESS Reality、Xray/3X-UI 和 Shadowrocket 接入，直到手机或电脑真实可用。
+这个 Skill 首先服务不懂服务器的新手：你只需要说明预算、所在地区、常用设备和主要用途，AI 负责推荐服务器；你完成购买和必要确认后，AI 继续搭建节点、适配客户端并完成真实验收。技术细节留给 AI 执行，你只在付款、安全和关键取舍处做决定。
 
 **费用不会做到一半才告诉你。** 这个 Skill 本身免费开源，但租服务器、购买客户端或更换 IP 等第三方服务可能收费。Codex 会在开始前列出全部预计费用、收费周期和续费方式；每次实际付款前再次说明，只有你确认后才继续。
 
@@ -10,7 +10,7 @@ Deploy Private VPN Node 首先服务不懂服务器的新手：你只需要说�
 
 它不是机场面板、公开订阅服务或来源不明的一键安装脚本，只面向个人或极少数受信任设备的合法使用。
 
-**Created by [Nar / 那不然](https://github.com/Nar101)** · Official repository: [`Nar101/deploy-private-vpn-node`](https://github.com/Nar101/deploy-private-vpn-node)
+**Created by [Nar / 那不然](https://github.com/Nar101)** · Official repository: [`Nar101/deploy-private-proxy-node`](https://github.com/Nar101/deploy-private-proxy-node)
 
 > 本项目最初由 **Nar / 那不然** 设计并开源。欢迎在 MIT License 下使用、修改和再发布；再分发本项目的全部或实质性部分时，请保留原始版权声明与许可证。
 
@@ -21,7 +21,7 @@ Deploy Private VPN Node 首先服务不懂服务器的新手：你只需要说�
 - 不再和很多人共享同一个出口；
 - 自己租一台 VPS，拥有一个个人节点；
 - 不学习一整套 Linux 和网络术语，也能在 AI 帮助下完成搭建；
-- 最终直接导入 Shadowrocket 使用，而不是停在服务器面板显示“运行中”。
+- 最终在 Shadowrocket、Clash/Mihomo、v2rayN 等兼容客户端中真实使用，而不是停在服务器面板显示“运行中”。
 
 这个 Skill 的完成标准很直接：**买对服务器 → AI 完成部署 → 导入客户端 → 真实能用。**
 
@@ -55,16 +55,16 @@ Codex 会先给出完整费用预期，而不是走到支付页面才提示：
 ## 30 秒开始
 
 ```bash
-npx skills add Nar101/deploy-private-vpn-node
+npx skills add Nar101/deploy-private-proxy-node
 ```
 
 安装后可以直接说：
 
 ```text
 我不想继续买共享梯子了，想自己搭一个个人节点，但我不懂服务器。
-使用 deploy-private-vpn-node，先根据我的预算、地区、设备和用途推荐一台 VPS；
+使用 deploy-private-proxy-node，先根据我的预算、地区、设备和用途推荐一台海外服务器；
 开始前先列出全部预计费用，每次实际付款都先说明并等我确认；
-买完后请继续帮我搭好，并导入 Shadowrocket，直到真实能用。
+买完后请继续帮我搭好，并适配我现有的客户端，直到真实能用。
 ```
 
 ## 支持的工作模式
@@ -75,6 +75,7 @@ npx skills add Nar101/deploy-private-vpn-node
 | `clone` | 复制已验证架构，但重新生成全部实例凭证 |
 | `diagnose` | 排查超时、抖动、端口或目标服务不可用 |
 | `maintain` | 审计、备份、升级、恢复与收紧暴露面 |
+| `client-adapt` | 为现有节点适配新的 macOS、Windows 或手机客户端 |
 
 ## 它会做什么
 
@@ -82,7 +83,7 @@ npx skills add Nar101/deploy-private-vpn-node
 - 开始前列出必需和可选费用，避免意外收费；
 - 给新手一个明确的 VPS 推荐，而不是扔出一堆术语；
 - 购买后接管空白 Ubuntu VPS，部署 VLESS + Reality + Vision；
-- 生成客户端配置并接入 Shadowrocket；
+- 识别操作系统和现有客户端，生成对应配置并完成接入；
 - 用真实网页/API 和出口 IP 确认节点确实能用；
 - 然后再完成凭证保护、防火墙、备份和维护；
 - 把云防火墙和 UFW 当作两道独立入口检查；
@@ -98,8 +99,11 @@ SKILL.md
 agents/openai.yaml
 references/
   security-and-acceptance.md
+  client-adapters.md
+  clash-mihomo.md
   shadowrocket.md
   tencent-lighthouse.md
+  windows.md
 scripts/
   audit-server.sh
   backup-xui.sh
@@ -130,9 +134,9 @@ bash scripts/verify-client.sh \
 
 ## 已验证范围
 
-当前版本在一台真实的腾讯云轻量应用服务器东京实例上完成了完整部署，并在同一实例上完成一次零断流安全加固：Ubuntu 24.04、3X-UI、Xray、VLESS Reality Vision 和 Shadowrocket。
+当前版本在一台真实的腾讯云轻量应用服务器东京实例上完成了完整部署，并在同一实例上完成一次零断流安全加固。macOS + Shadowrocket 路径已经真实验收；Clash/Mihomo 的必要字段与 v2rayN 的平台能力已经根据官方资料核对，但尚未在当前用户的 Mac Clash 和 Windows 实机上走完。
 
-这证明了当前腾讯云路径，不代表所有供应商、运营商、地区和客户端已经验证。公网 IP 也不等于住宅 IP，当前可访问不代表长期不会触发目标服务风控。
+Skill 会明确区分 `A 已实测`、`B 文档核对` 和 `C 标准引导`。它能按照统一流程选择、配置、验收、排障和回退，但不承诺所有供应商、运营商、地区、系统和客户端 100% 成功。公网 IP 也不等于住宅 IP，当前可访问不代表长期不会触发目标服务风控。
 
 ## 隐私与安全边界
 

@@ -1,12 +1,12 @@
 cff-version: 1.2.0
-message: "If you use Deploy Private VPN Node in your work, please cite the original project and creator."
-title: "Deploy Private VPN Node by Nar"
+message: "If you use Deploy Private Proxy Node in your work, please cite the original project and creator."
+title: "Deploy Private Proxy Node by Nar"
 type: software
 authors:
   - name: "Nar / 那不然"
     alias: "Nar101"
-url: "https://github.com/Nar101/deploy-private-vpn-node"
-repository-code: "https://github.com/Nar101/deploy-private-vpn-node"
+url: "https://github.com/Nar101/deploy-private-proxy-node"
+repository-code: "https://github.com/Nar101/deploy-private-proxy-node"
 license: MIT
-version: 0.2.2
-date-released: 2026-07-26
+version: 0.3.1
+date-released: 2026-07-27

@@ -10,9 +10,12 @@ required=(
   NOTICE
   CITATION.cff
   agents/openai.yaml
+  references/client-adapters.md
+  references/clash-mihomo.md
   references/security-and-acceptance.md
   references/shadowrocket.md
   references/tencent-lighthouse.md
+  references/windows.md
   scripts/audit-server.sh
   scripts/backup-xui.sh
   scripts/verify-client.sh

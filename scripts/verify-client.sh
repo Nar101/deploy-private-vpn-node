@@ -36,4 +36,3 @@ curl "${curl_common[@]}" -o /dev/null -w 'claude %{http_code} %{time_total}s\n' 
 curl "${curl_common[@]}" -o /dev/null -w 'google %{http_code} %{time_total}s\n' https://www.google.com/generate_204
 
 echo 'Expected unauthenticated statuses: OpenAI 401, Claude 401, Google 204.'
-
