@@ -1,56 +1,39 @@
 # 搭建私人魔法节点 · by Nar
 
-> 购买一台海外服务器，让 AI 带你搭建只供自己使用的魔法上网节点。
+> 让 AI 带新手比较并购买海外服务器，直到自己的客户端真实可用。
 
-这个 Skill 首先服务不懂服务器的新手：你只需要说明预算、所在地区、常用设备和主要用途，AI 负责推荐服务器；你完成购买和必要确认后，AI 继续搭建节点、适配客户端并完成真实验收。技术细节留给 AI 执行，你只在付款、安全和关键取舍处做决定。
+这个 Skill 面向不懂服务器、但希望拥有个人独立出口的人。你说明预算、所在地区、设备和主要用途；AI 负责比较 VPS、核对费用、部署服务端、适配客户端、独立分流、真实验收、备份和跨设备交付。付款、实名、验证码、断流和关键安全动作始终由你确认。
 
-**费用不会做到一半才告诉你。** 这个 Skill 本身免费开源，但租服务器、购买客户端或更换 IP 等第三方服务可能收费。Codex 会在开始前列出全部预计费用、收费周期和续费方式；每次实际付款前再次说明，只有你确认后才继续。
+**Created by [Nar / 那不然](https://github.com/Nar101)** · [v0.5.0 Release](https://github.com/Nar101/deploy-private-proxy-node/releases/tag/v0.5.0)
 
-安全基线、双层防火墙、独立验收、备份和维护是第二层能力。它们不是这个 Skill 的主角，而是为了避免“节点看起来装好了，却连不上、泄露凭证或很快坏掉”。
+本项目只处理个人或极少数受信任设备的合法使用，不搭机场、不售卖、不开放注册或公网订阅。
 
-它不是机场面板、公开订阅服务或来源不明的一键安装脚本，只面向个人或极少数受信任设备的合法使用。
+## v0.5.0 解决了什么
 
-**Created by [Nar / 那不然](https://github.com/Nar101)** · Official repository: [`Nar101/deploy-private-proxy-node`](https://github.com/Nar101/deploy-private-proxy-node)
+旧流程容易停在“服务器安装成功”，但用户的 Shadowrocket 或其他客户端仍不可用。v0.5.0 把购买后的交付重构为七个证据门：
 
-> 本项目最初由 **Nar / 那不然** 设计并开源。欢迎在 MIT License 下使用、修改和再发布；再分发本项目的全部或实质性部分时，请保留原始版权声明与许可证。
+```text
+G0 采购确认
+→ G1 实例与 SSH 就绪
+→ G2 服务端基线
+→ G3 Reality 公网协议
+→ G4 原生客户端
+→ G5 独立分流与真实业务
+→ G6 备份与跨设备交付
+```
 
-## 它首先解决什么
+前一门没有证据，不进入后一门，也不提前报告完成。
 
-你可能正在使用机场或共享订阅，但希望：
+本版重点加入：
 
-- 不再和很多人共享同一个出口；
-- 自己租一台 VPS，拥有一个个人节点；
-- 不学习一整套 Linux 和网络术语，也能在 AI 帮助下完成搭建；
-- 最终在 Shadowrocket、Clash/Mihomo、v2rayN 等兼容客户端中真实使用，而不是停在服务器面板显示“运行中”。
-
-这个 Skill 的完成标准很直接：**买对服务器 → AI 完成部署 → 导入客户端 → 真实能用。**
-
-## 费用会在开始前讲清楚
-
-Codex 会先给出完整费用预期，而不是走到支付页面才提示：
-
-- 哪些费用是必需的，哪些是可选的；
-- 当前价格和币种；
-- 一次性购买还是按月、按年续费；
-- 首购优惠结束后的续费价格；
-- 是否自动续费；
-- 不购买会影响什么。
-
-每次真实付款前，Codex 会再次说明“买什么、为什么、多少钱、以后是否还收费”。付款、实名、验证码和自动续费选择始终由用户完成。
-
-## 为什么还要做后面的安全和验收
-
-对新手来说，节点“装上了”之后仍然有很多坑：
-
-- 把一键脚本显示“安装成功”当成节点真的可用；
-- 服务器监听了 443，却漏查云厂商外层防火墙；
-- 为了方便管理，把 3X-UI 面板、订阅端口或数据库暴露到公网；
-- 在聊天、日志、仓库和截图里泄露私钥、UUID、节点链接或 Token；
-- 只看一次延迟，不验证真实出口和目标服务；
-- 把 `unattended-upgrades active` 误认为安全补丁已经生效；
-- 在用户要求不断网时，直接更新内核、网络栈或重启 Xray。
-
-这个 Skill 把这些风险变成明确顺序、证据和阻断条件，但它们都服务于最初那个目标：让新手真正用上自己的节点。
+- Reality 客户端版本边界预检；
+- Shadowrocket UI、节点、规则、隧道四层真相；
+- 新服务器 IP 的 TUN 防回环检查；
+- 不切换全局节点的独立测试组；
+- 以“服务器是否收到连接、Reality 是否认证”为主干的故障树；
+- 服务器本地看门狗保护的调试窗口；
+- 出口、目标服务、下载与路由证据的结构化验收；
+- 不含 SSH 私钥的跨设备文件包。
 
 ## 30 秒开始
 
@@ -58,39 +41,62 @@ Codex 会先给出完整费用预期，而不是走到支付页面才提示：
 npx skills add Nar101/deploy-private-proxy-node
 ```
 
-安装后可以直接说：
+安装后可以说：
 
 ```text
-我不想继续买共享梯子了，想自己搭一个个人节点，但我不懂服务器。
-使用 deploy-private-proxy-node，先根据我的预算、地区、设备和用途推荐一台海外服务器；
-开始前先列出全部预计费用，每次实际付款都先说明并等我确认；
-买完后请继续帮我搭好，并适配我现有的客户端，直到真实能用。
+使用 deploy-private-proxy-node，按交付门带我比较并购买海外 VPS，
+部署私人节点，完成原生客户端、独立分流、真实出口、目标服务、
+备份和跨设备文件交付；所有付费、断流和关键安全动作都先等我确认。
 ```
 
-## 支持的工作模式
+## 工作模式
 
 | 模式 | 适用场景 |
 | --- | --- |
-| `new-deploy` | 从 VPS 采购判断到节点交付 |
-| `clone` | 复制已验证架构，但重新生成全部实例凭证 |
-| `diagnose` | 排查超时、抖动、端口或目标服务不可用 |
-| `maintain` | 审计、备份、升级、恢复与收紧暴露面 |
-| `client-adapt` | 为现有节点适配新的 macOS、Windows 或手机客户端 |
+| `new-deploy` | VPS 比较、购买到完整交付 |
+| `clone` | 在新 VPS 复制已验证架构并重建凭证 |
+| `diagnose` | 节点超时、Reality/VLESS、路由或目标服务故障 |
+| `maintain` | 审计、备份、升级、换 IP 和恢复 |
+| `client-adapt` | 为现有节点接入新客户端或新设备 |
 
-## 它会做什么
+## 为什么这版更快
 
-- 用大白话了解预算、地区、设备和主要用途；
-- 开始前列出必需和可选费用，避免意外收费；
-- 给新手一个明确的 VPS 推荐，而不是扔出一堆术语；
-- 购买后接管空白 Ubuntu VPS，部署 VLESS + Reality + Vision；
-- 识别操作系统和现有客户端，生成对应配置并完成接入；
-- 用真实网页/API 和出口 IP 确认节点确实能用；
-- 然后再完成凭证保护、防火墙、备份和维护；
-- 把云防火墙和 UFW 当作两道独立入口检查；
-- SSH 默认使用密钥，禁 root 和密码远程登录；
-- 面板和订阅端口默认不向公网开放；
-- 区分零断流动作与必须进入维护窗口的动作；
-- 提供只读审计、SQLite 热备份和客户端验证脚本。
+第一次失败先问两个问题：
+
+1. 服务器是否收到客户端连接？
+2. 收到后 Reality 是否认证成功？
+
+这会把故障快速分成：
+
+- 服务器前路径：公网 IP、云防火墙、TUN 防回环、节点保存态、隧道快照；
+- Reality 认证：凭证哈希、SNI、short ID、时间和客户端版本边界；
+- VLESS/XTLS：UUID、Vision flow、TCP 与客户端序列化；
+- 业务路由：规则顺序、代理组委托和真实出口。
+
+没有新证据时，Skill 会拒绝反复更换端口、指纹、核心版本、target 或协议。
+
+## Reality 版本兼容
+
+截至 2026-07-28，Xray-core 当前源码在 `minClientVer` 留空时会应用默认最低客户端版本 `26.3.27`，其他 Reality 客户端可能被拒绝。Skill 会检查 Xray 实际加载配置和服务端记录的握手 `ClientVer`，只有证据闭合后才建议单变量放宽。
+
+这里的 `ClientVer` 是 Reality 握手值，不一定等于 GUI 应用商店版本。显式降低最低版本还伴随 Xray 官方安全警告，因此不是所有部署的无条件默认。
+
+## Shadowrocket 原生验收
+
+macOS Shadowrocket 路径已经真实验证，但不把“导入成功”视为可用：
+
+- 新节点 IP 先排除 TUN 回环；
+- 导入后回读节点保存态；
+- 节点测试必须产生真实连接证据；
+- 建立只指向新节点的临时验收组；
+- 出口 IP、Google、OpenAI、Claude 和下载都要有运行日志证明命中新节点；
+- 独立 Xray 成功不能替代 Shadowrocket 原生成功。
+
+## 费用与购买边界
+
+Skill 本身免费开源，VPS、客户端、换 IP 或额外流量可能收费。AI 会在开始前列出当前官方价格、首购、续费、周期、自动续费、独立 IPv4、流量、退款与可选费用；每次付款前再次说明。付款、实名、验证码和下单由用户本人完成。
+
+标称带宽通常是峰值或共享资源池能力，不是稳定吞吐承诺。最终只报告真实测试条件和结果。
 
 ## 目录
 
@@ -98,53 +104,73 @@ npx skills add Nar101/deploy-private-proxy-node
 SKILL.md
 agents/openai.yaml
 references/
-  security-and-acceptance.md
+  provider-selection.md
   client-adapters.md
-  clash-mihomo.md
+  reality-compatibility.md
   shadowrocket.md
+  troubleshooting.md
+  security-and-acceptance.md
   tencent-lighthouse.md
+  device-handoff.md
+  clash-mihomo.md
   windows.md
 scripts/
   audit-server.sh
-  backup-xui.sh
+  preflight-reality.sh
+  diagnose-node.sh
+  run-debug-window.sh
+  redact-debug-log.py
   verify-client.sh
+  build-transfer-package.sh
+  backup-xui.sh
+  test-skill.sh
+  validate-public.sh
 ```
 
-## 脚本
-
-只读审计服务器：
+## 常用脚本
 
 ```bash
+# 只读服务器审计
 sudo bash scripts/audit-server.sh
-```
 
-热备份 3X-UI SQLite 数据库并执行完整性检查：
+# Reality 有效配置预检，只输出结构和哈希
+bash scripts/preflight-reality.sh --config /path/to/effective-config.json
 
-```bash
-sudo bash scripts/backup-xui.sh /path/to/x-ui-backup.db
-```
+# 根据已知证据选择下一条诊断分支
+bash scripts/diagnose-node.sh \
+  --server-received clienthello \
+  --reality failed \
+  --vless unknown \
+  --exit unknown \
+  --effective-config yes \
+  --contaminated no \
+  --restored yes
 
-验证本地 SOCKS 出口和目标服务：
-
-```bash
+# 验证本地代理出口与目标服务
 bash scripts/verify-client.sh \
   --proxy socks5h://127.0.0.1:1082 \
-  --expected-ip <VPS_IP>
+  --expected-ip <VPS_IP> \
+  --json-output /path/to/result.json
+
+# 备份 3X-UI 数据库
+sudo bash scripts/backup-xui.sh /path/to/x-ui-backup.db
 ```
 
 ## 已验证范围
 
-当前版本在一台真实的腾讯云轻量应用服务器东京实例上完成了完整部署，并在同一实例上完成一次零断流安全加固。macOS + Shadowrocket 路径已经真实验收；Clash/Mihomo 的必要字段与 v2rayN 的平台能力已经根据官方资料核对，但尚未在当前用户的 Mac Clash 和 Windows 实机上走完。
+- 腾讯云轻量 Ubuntu 24.04、3X-UI/Xray、VLESS Reality Vision：东京与硅谷真实案例；
+- macOS Shadowrocket 原生节点、独立分流、出口和目标服务：A 已实测；
+- Clash/Mihomo、Windows v2rayN：B/C，按当前内核和设备现场验证；
+- 线路、IP 信誉和晚高峰：始终现场测试，不承诺永久稳定。
 
-Skill 会明确区分 `A 已实测`、`B 文档核对` 和 `C 标准引导`。它能按照统一流程选择、配置、验收、排障和回退，但不承诺所有供应商、运营商、地区、系统和客户端 100% 成功。公网 IP 也不等于住宅 IP，当前可访问不代表长期不会触发目标服务风控。
+## 隐私与安全
 
-## 隐私与安全边界
-
-- 仓库不包含真实公网 IP、私钥、密码、UUID、Reality 私钥、short ID、Token、分享 URI 或数据库正文；
-- Skill 不自动付款、实名、修改全局代理或开放公网订阅；
-- 所有敏感交付物保存在本机并使用 `600` 权限；
-- 日志中的“未发现失陷迹象”不等于取证级安全证明；
-- 涉及内核、SSH、网络栈、443、Xray 重启或云防火墙的动作必须单独判断断流风险。
+- 仓库不包含真实私钥、密码、UUID、Reality 私钥、short ID、Token、节点 URI 或数据库正文；
+- 敏感交付物只保存在本机，权限使用 `600`；
+- 3X-UI 面板与订阅端口默认不公开；
+- 独立节点 URI 不等于公网订阅；
+- 会占用正式 443 的调试必须由服务器本地看门狗自动恢复并对日志脱敏；
+- 退款、销毁和停用旧节点始终由用户确认。
 
 ## 验证公开版本
 
@@ -152,14 +178,12 @@ Skill 会明确区分 `A 已实测`、`B 文档核对` 和 `C 标准引导`。�
 bash scripts/validate-public.sh
 ```
 
-校验包含 Shell 语法、必需文件、敏感文件类型、私钥/节点链接/UUID 字面量、公开 IP 和 SQLite 热备份完整性。
+公开校验覆盖 Skill 结构、脚本语法与测试、敏感文件和字面量扫描、SQLite 热备份以及发布元数据一致性。
 
-## 作者
+## 作者与许可
 
 **[Nar / 那不然](https://github.com/Nar101)**
 
-我在持续实践一件事：如何让 AI 从一次性回答，走向理解真实环境、遵守操作边界、执行并验证结果。这个 Skill 是其中一个可公开复用的真实样本。
+我在持续实践一件事：让 AI 从一次性回答，走向理解真实环境、遵守操作边界、执行并验证结果。这个 Skill 是其中一个可公开复用的真实样本。
 
-## License
-
-[MIT](./LICENSE)
+[MIT License](./LICENSE)

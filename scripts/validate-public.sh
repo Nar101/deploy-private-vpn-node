@@ -4,33 +4,27 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 required=(
-  SKILL.md
-  README.md
-  LICENSE
-  NOTICE
-  CITATION.cff
-  agents/openai.yaml
-  references/client-adapters.md
-  references/clash-mihomo.md
-  references/security-and-acceptance.md
-  references/shadowrocket.md
-  references/tencent-lighthouse.md
-  references/windows.md
-  scripts/audit-server.sh
-  scripts/backup-xui.sh
-  scripts/verify-client.sh
+  SKILL.md README.md LICENSE NOTICE CITATION.cff agents/openai.yaml
+  references/provider-selection.md references/client-adapters.md
+  references/reality-compatibility.md references/shadowrocket.md
+  references/troubleshooting.md references/security-and-acceptance.md
+  references/tencent-lighthouse.md references/device-handoff.md
+  references/clash-mihomo.md references/windows.md
+  scripts/audit-server.sh scripts/preflight-reality.sh scripts/diagnose-node.sh
+  scripts/run-debug-window.sh scripts/redact-debug-log.py scripts/verify-client.sh
+  scripts/build-transfer-package.sh scripts/backup-xui.sh scripts/test-skill.sh
 )
 
 for path in "${required[@]}"; do
-  if [[ ! -f "$root/$path" ]]; then
-    echo "Missing required file: $path" >&2
-    exit 1
-  fi
+  [[ -f "$root/$path" ]] || { echo "Missing required file: $path" >&2; exit 1; }
 done
 
 for script in "$root"/scripts/*.sh; do
   bash -n "$script"
 done
+PYTHONPYCACHEPREFIX="${TMPDIR:-/tmp}/private-proxy-pycache" \
+  python3 -m py_compile "$root/scripts/redact-debug-log.py"
+bash "$root/scripts/test-skill.sh"
 
 if find "$root" -path "$root/.git" -prune -o -type f \
   \( -name '*.pem' -o -name '*.key' -o -name '*.db' -o -name '*.sqlite' -o -name '*.sqlite3' \) \
@@ -40,12 +34,12 @@ if find "$root" -path "$root/.git" -prune -o -type f \
 fi
 
 secret_pattern='(vless|ss|trojan)://|BEGIN (OPENSSH |RSA |EC )?PRIVATE KEY|ssh-(rsa|ed25519) AAAA|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|/Users/[A-Za-z0-9._-]+|/home/[A-Za-z0-9._-]+|~/Downloads'
-if grep -REnI --exclude-dir=.git --exclude='validate-public.sh' "$secret_pattern" "$root"; then
+if grep -REnI --exclude-dir=.git --exclude='validate-public.sh' --exclude='test-skill.sh' --exclude='redact-debug-log.py' --exclude='build-transfer-package.sh' "$secret_pattern" "$root"; then
   echo 'High-risk literal found in the release tree.' >&2
   exit 1
 fi
 
-public_ips="$({ grep -REhoI --exclude-dir=.git --exclude='validate-public.sh' '([0-9]{1,3}\.){3}[0-9]{1,3}' "$root" || true; } | sort -u)"
+public_ips="$({ grep -REhoI --exclude-dir=.git --exclude='validate-public.sh' --exclude='test-skill.sh' '([0-9]{1,3}\.){3}[0-9]{1,3}' "$root" || true; } | sort -u)"
 while IFS= read -r ip; do
   [[ -z "$ip" ]] && continue
   case "$ip" in
@@ -53,6 +47,10 @@ while IFS= read -r ip; do
     *) echo "Unexpected IPv4 literal: $ip" >&2; exit 1 ;;
   esac
 done <<<"$public_ips"
+
+grep -q '^version: 0.5.0$' "$root/CITATION.cff"
+grep -q '当前 `v0.5.0`' "$root/SKILL.md"
+grep -q '/releases/tag/v0.5.0' "$root/README.md"
 
 if command -v sqlite3 >/dev/null 2>&1; then
   tmpdir="$(mktemp -d)"

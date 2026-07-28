@@ -1,4 +1,4 @@
 interface:
   display_name: "搭建私人魔法节点"
-  short_description: "购买一台海外服务器，搭建只供自己使用的魔法上网节点"
-  default_prompt: "使用 $deploy-private-proxy-node，先识别我的设备和现有客户端，再带我搭建并验收只供自己使用的私人魔法上网节点；说明哪些路径已经实测，所有付费和安全设置都先等我确认。"
+  short_description: "购买海外VPS并直达原生客户端真实可用的安全私人节点"
+  default_prompt: "使用 $deploy-private-proxy-node，按交付门带我比较并购买海外 VPS，部署私人节点，完成原生客户端、独立分流、真实出口、目标服务、备份和跨设备文件交付；所有付费、断流和关键安全动作都先等我确认。"
