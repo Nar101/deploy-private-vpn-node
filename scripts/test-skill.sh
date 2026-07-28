@@ -70,7 +70,12 @@ printf '%s\n' '[Rule]' 'DOMAIN,example.com,NEW-NODE-TEST' >"$tmpdir/rules.conf"
 bash "$root/scripts/build-transfer-package.sh" \
   --node-file "$tmpdir/node.txt" --rules-file "$tmpdir/rules.conf" \
   --output-dir "$tmpdir/package" >/dev/null
-[[ "$(stat -f '%Lp' "$tmpdir/package/node.txt" 2>/dev/null || stat -c '%a' "$tmpdir/package/node.txt")" == '600' ]]
+if [[ "$(uname -s)" == 'Darwin' ]]; then
+  package_mode="$(stat -f '%Lp' "$tmpdir/package/node.txt")"
+else
+  package_mode="$(stat -c '%a' "$tmpdir/package/node.txt")"
+fi
+[[ "$package_mode" == '600' ]]
 [[ -f "$tmpdir/package/SHA256SUMS" ]]
 
 printf '%s%s\n' '-----BEGIN OPENSSH ' 'PRIVATE KEY-----' >"$tmpdir/private-node.txt"
